@@ -8,14 +8,6 @@ import java.io.UnsupportedEncodingException;
 
 public class HexTool {
     private static final String HEX_CHARS = "0123456789abcdef";
-    private static HexTool instance;
-
-    public static HexTool getInstance() {
-        if (instance == null) {
-            instance = new HexTool();
-        }
-        return instance;
-    }
 
     /**
      * 字节数组转十六进制字符串
@@ -23,7 +15,7 @@ public class HexTool {
      * @param bytes
      * @return
      */
-    public String bytesToHexString(byte[] bytes) {
+    public static String bytesToHexString(byte[] bytes) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < bytes.length; i++) {
             sb.append(HEX_CHARS.charAt(bytes[i] >>> 4 & 0x0F));
@@ -38,7 +30,7 @@ public class HexTool {
      * @param hex
      * @return
      */
-    public byte[] hexStringToBytes(String hex) {
+    public static byte[] hexStringToBytes(String hex) {
         byte[] buf = new byte[hex.length() / 2];
         int j = 0;
         for (int i = 0; i < buf.length; i++) {
@@ -55,7 +47,7 @@ public class HexTool {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public String hexStringToContent(String hex) throws UnsupportedEncodingException {
+    public static String hexStringToContent(String hex) throws UnsupportedEncodingException {
         return new String(hexStringToBytes(hex), "GB2312");
     }
 
@@ -65,7 +57,7 @@ public class HexTool {
      * @param hex
      * @return
      */
-    public double hexStringToDouble(String hex) {
+    public static double hexStringToDouble(String hex) {
         return Double.longBitsToDouble(Long.valueOf(hex, 16));
     }
 
@@ -75,33 +67,8 @@ public class HexTool {
      * @param d
      * @return
      */
-    public String doubleToHexString(double d) {
+    public static String doubleToHexString(double d) {
         return Long.toHexString(Double.doubleToLongBits(d));
-    }
-
-    /**
-     * 获取异或和，支持多字节
-     *
-     * @param hex
-     * @return
-     */
-    public String getXOR(String hex) {
-        if (hex.length() == 0) {
-            return null;
-        }
-        if (hex.length() % 2 != 0) {
-            hex = "0" + hex;
-        }
-        int or = 0;
-        for (int i = 0, size = hex.length(); i < size; i = i + 2) {
-            String subHex = hex.substring(i, i + 2);
-            or = or ^ Integer.parseInt(subHex, 16);
-        }
-        String xor = Integer.toHexString(or) + "";
-        if (xor.length() == 1) {
-            xor = "0" + xor;
-        }
-        return xor;
     }
 
     /**
@@ -109,7 +76,7 @@ public class HexTool {
      * @param keepByteLength 保留多少字节数，用于补0
      * @return
      */
-    public String getDataLengthHexStr(String data, int keepByteLength) {
+    public static String getDataLengthHexStr(String data, int keepByteLength) {
         int length = data.getBytes().length;
         String dataLength = Integer.toHexString(length);
         while (dataLength.length() < keepByteLength * 2) {
@@ -117,4 +84,64 @@ public class HexTool {
         }
         return dataLength;
     }
+
+    /**
+     * int转byte数组，高字节在前
+     *
+     * @param val
+     * @param byteLength 数组长度
+     * @return
+     */
+    private static byte[] intToBytes(int val, int byteLength) {
+        byte[] bytes = new byte[byteLength];
+        if (byteLength == 1) {
+            bytes[0] = (byte) (val & 0xff);
+        }
+        if (byteLength == 2) {
+            bytes[1] = (byte) (val & 0xff);
+            bytes[0] = (byte) ((val >> 8) & 0xff);
+        }
+        if (byteLength == 3) {
+            bytes[2] = (byte) (val & 0xff);
+            bytes[1] = (byte) ((val >> 8) & 0xff);
+            bytes[0] = (byte) ((val >> 16) & 0xff);
+        }
+        if (byteLength == 4) {
+
+            bytes[3] = (byte) (val & 0xff);
+            bytes[2] = (byte) ((val >> 8) & 0xff);
+            bytes[1] = (byte) ((val >> 16) & 0xff);
+            bytes[0] = (byte) ((val >> 24) & 0xff);
+        }
+        return bytes;
+    }
+
+    /**
+     * 获取异或结果
+     *
+     * @param data
+     * @return
+     */
+    public static byte getXOR(byte[] data) {
+        byte temp = data[0];
+        for (int i = 1; i < data.length; i++) {
+            temp ^= data[i];
+        }
+        return temp;
+    }
+
+    /**
+     * 把所有数据进行异或，并把异或结果加在数据后进行返回
+     * @param temp
+     * @return
+     */
+    public static byte[] getDataAfterXOR(byte[] temp) {
+        byte xor = getXOR(temp);
+        byte[] data = new byte[temp.length + 1];
+        System.arraycopy(temp, 0, data, 0, temp.length);
+        data[data.length - 1] = xor;
+        return data;
+    }
+
+
 }

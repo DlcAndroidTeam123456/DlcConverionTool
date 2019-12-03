@@ -3,6 +3,8 @@ package com.dlc.dlcconversiontooldemo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.dlc.dlcconversiontool.HexTool;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
