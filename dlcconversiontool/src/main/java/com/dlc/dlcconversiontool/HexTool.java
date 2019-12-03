@@ -92,7 +92,7 @@ public class HexTool {
      * @param byteLength 数组长度
      * @return
      */
-    private static byte[] intToBytes(int val, int byteLength) {
+    public static byte[] intToBytes(int val, int byteLength) {
         byte[] bytes = new byte[byteLength];
         if (byteLength == 1) {
             bytes[0] = (byte) (val & 0xff);
