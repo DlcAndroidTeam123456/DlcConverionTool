@@ -170,4 +170,32 @@ public class HexTool {
         System.arraycopy(data, start, finalData, 0, end - start + 1);
         return finalData;
     }
+
+    /**
+     * 字节数组转int
+     * @param bytes 最大支持4个字节，否则报错
+     * @param isHighFront 是否高字节在前
+     * @return
+     */
+    public static int byteArrayToInt(byte[] bytes, boolean isHighFront) {
+        byte[] finalBytes = new byte[4];
+        if (isHighFront) {
+            System.arraycopy(bytes, 0, finalBytes, bytes.length, bytes.length);
+        } else {
+            System.arraycopy(bytes, 0, finalBytes, 0, bytes.length);
+        }
+        int value = 0;
+        if (isHighFront) {
+            value = (int) (((finalBytes[0] & 0xFF) << 24)
+                    | ((finalBytes[1] & 0xFF) << 16)
+                    | ((finalBytes[2] & 0xFF) << 8)
+                    | (finalBytes[3] & 0xFF));
+        } else {
+            value = (int) ((finalBytes[0] & 0xFF)
+                    | ((finalBytes[1] & 0xFF) << 8)
+                    | ((finalBytes[2] & 0xFF) << 16)
+                    | ((finalBytes[3] & 0xFF) << 24));
+        }
+        return value;
+    }
 }
