@@ -132,6 +132,7 @@ public class HexTool {
 
     /**
      * 把所有数据进行异或，并把异或结果加在数据后进行返回
+     *
      * @param temp
      * @return
      */
@@ -143,5 +144,30 @@ public class HexTool {
         return data;
     }
 
+    /**
+     * 数组合并，并返回一个新的数组
+     *
+     * @param data1
+     * @param data2
+     * @return
+     */
+    public static byte[] mergeData(byte[] data1, byte[] data2) {
+        byte[] finalData = new byte[data1.length + data2.length];
+        System.arraycopy(data1, 0, finalData, 0, data1.length);
+        System.arraycopy(data2, 0, finalData, data1.length, data2.length);
+        return finalData;
+    }
 
+    /**
+     * 获取数组的某一段并返回
+     * @param data 要获取的数组
+     * @param start 开始字节位置
+     * @param end 结束字节位置
+     * @return
+     */
+    public static byte[] getSomeData(byte[] data, int start, int end) {
+        byte[] finalData = new byte[end - start + 1];
+        System.arraycopy(data, start, finalData, 0, end - start + 1);
+        return finalData;
+    }
 }
