@@ -198,4 +198,61 @@ public class HexTool {
         }
         return value;
     }
+
+    /**
+     * 获取指定数据的从左开始第n个bit位的值
+     *
+     * @param bytes      包含目标数据的原始字节数组
+     * @param dataOffset 目标数据在原始字节数组中的开始位置，从0开始
+     * @param bitPos     需要获取的bit位在目标数据中的位置，从1开始，比如需要获取目标数组第2个字节的第3个bit位，则bitPos=(2-1)*8+3
+     * @return
+     */
+    public static int getBitFromLeft(byte[] bytes, int dataOffset, int bitPos) {
+        int byteIndex = dataOffset + (bitPos - 1) / 8;
+        int bitOffset = 8 - (bitPos - 1) % 8 - 1;
+        if ((bytes[byteIndex] & (1 << bitOffset)) != 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * 获取指定数据的从左开始第n个bit位的值
+     *
+     * @param bytes  目标数据
+     * @param bitPos 需要获取的bit位在目标数据中的从左开始位置，从1开始，比如需要获取目标数组第2个字节的第3个bit位，则bitPos=(2-1)*8+3
+     * @return
+     */
+    public static int getBitFromLeft(byte[] bytes, int bitPos) {
+        return getBitFromLeft(bytes, 0, bitPos);
+    }
+
+    /**
+     * 获取指定数据的从右开始第n个bit位的值
+     *
+     * @param bytes      包含目标数据的原始字节数组
+     * @param dataOffset 目标数据在原始字节数组中的开始位置，从0开始
+     * @param dataLen    目标数据的字节长度
+     * @param bitPos     需要获取的bit位在目标数据中的从右开始位置，从1开始，比如需要获取目标数组第2个字节的第3个bit位，则bitPos=(2-1)*8+3
+     * @return
+     */
+    public static int getBitFromRight(byte[] bytes, int dataOffset, int dataLen, int bitPos) {
+        int byteIndex = dataOffset + dataLen - 1 - (bitPos - 1) / 8;
+        int bitOffset = (bitPos - 1) % 8;
+        if ((bytes[byteIndex] & (1 << bitOffset)) != 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * 获取指定数据的从右开始第n个bit位的值
+     *
+     * @param bytes      目标数据
+     * @param bitPos     需要获取的bit位在目标数据中的从右开始位置，从1开始，比如需要获取目标数组第2个字节的第3个bit位，则bitPos=(2-1)*8+3
+     * @return
+     */
+    public static int getBitFromRight(byte[] bytes, int bitPos) {
+        return getBitFromRight(bytes, 0, bytes.length, bitPos);
+    }
 }
