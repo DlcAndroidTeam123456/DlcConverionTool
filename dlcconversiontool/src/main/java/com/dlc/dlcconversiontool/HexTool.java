@@ -179,7 +179,7 @@ public class HexTool {
      */
     public static int byteArrayToInt(byte[] bytes, boolean isHighFront) {
         if (isHighFront) {
-         return Integer.parseInt(HexTool.bytesToHexString(bytes));
+         return Integer.parseInt(HexTool.bytesToHexString(bytes),16);
         } else {
             byte[] finalBytes = new byte[bytes.length];
             for (int i = 0; i < bytes.length; i++) {
