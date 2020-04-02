@@ -185,7 +185,7 @@ public class HexTool {
             for (int i = 0; i < bytes.length; i++) {
                 finalBytes[i] = bytes[bytes.length-1-i];
             }
-            return Integer.parseInt(HexTool.bytesToHexString(finalBytes));
+            return Integer.parseInt(HexTool.bytesToHexString(finalBytes),16);
         }
     }
 
